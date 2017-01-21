@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <title>Geocalizacion</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <meta charset="utf-8" />
+      <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+      
+      <style>
+      
+      html, body, #map
+          {
+              height: 100%;
+              width: 100%;
+              margin: 0px;
+              padding: 0px;
+          }
+          
+      </style>
+      
+      <script>
+      function drawMap(latlng)
+      {
+        var options = {zoom:10, center:latlng};   
+          
+          //Aqui se crea el mapa
+          
+          var map = new google.maps.Map(document.getElementById("map"), options);
+          
+          //Aqui creamos el marcador(Autobus)(Punto sumulado)
+          
+          var marker = new google.maps.Marker({
+              position: latlng,
+              map: map,
+              title: "Autobus simulado"
+          });
+          
+      }
+          //Por  si no funcionara el marcador creado anteriormente ponemos una a pelo(En este caso la de hollywood)
+          var defaultLatLng = new google.maps.LatLng(34.0983425, -118.3267434);
+          
+          //Funcion para obtener la geolocalizacion con la api HTML5 y cargar el mapa
+          function init_map(){
+              //Si el navegador es compatible
+              if(navigator.geolocation)
+                  {
+                      //La localizacion ha sido encontrada
+                      function success(pos)
+                      {
+                          drawMap(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+                      }
+                      //La localizacion no ha sido encontrada
+                      function fail(error)
+                      {
+                          drawMap(defaultLatLng);
+                      }
+                      
+                      //Cargamos la geolocalizacon del usuario
+                      navigator.geolocation.getCurrentPosition(success, fail);
+                  }
+              else // Si la Api html5 no funciona
+                  {
+                      drawMap(defaultLatLng);
+                  }
+          }
+          
+          window.onload = function(){
+              init_map();
+          }
+          
+      </script>
+      
+  </head>
+  <body>
+    <div id="map"></div>
+  </body>
+</html> 
